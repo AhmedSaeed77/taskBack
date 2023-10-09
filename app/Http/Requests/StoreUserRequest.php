@@ -21,11 +21,18 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $request = 'title';
         return [
             'username' => 'required:users',
             'email' => 'required:users',
             'bio' => 'required:users',
-            'file' => Rule::requiredIf('title' != null),
+            'file' => [
+                Rule::requiredIf(function () use ($request) {
+                    return 'title' !== null;
+                }),
+                'file',
+                'mimes:jpeg,jpg,png,pdf',
+            ],
         ];
     }
 
